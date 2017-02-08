@@ -52,6 +52,7 @@ defmodule AuthExample.Web do
       import AuthExample.Router.Helpers
       import AuthExample.ErrorHelpers
       import AuthExample.Gettext
+      import AuthExample.Session, only: [current_user: 1, logged_in?: 1]
     end
   end
 
