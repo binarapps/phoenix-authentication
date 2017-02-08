@@ -9,12 +9,17 @@ defmodule AuthExample.Router do
     plug :put_secure_browser_headers
   end
 
+  pipeline :browser_auth do
+    plug Guardian.Plug.VerifySession
+    plug Guardian.Plug.LoadResource
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
   end
 
   scope "/", AuthExample do
-    pipe_through :browser # Use the default browser stack
+    pipe_through [:browser, :browser_auth]
 
     get "/", PageController, :index
     resources "/registrations", RegistrationController, only: [:new, :create]

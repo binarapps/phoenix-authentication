@@ -17,6 +17,14 @@ config :auth_example, AuthExample.Endpoint,
   pubsub: [name: AuthExample.PubSub,
            adapter: Phoenix.PubSub.PG2]
 
+# Configures guardian plugin
+config :guardian, Guardian,
+  issuer: "AuthExample",
+  ttl: { 30, :days },
+  allowed_drift: 2000,
+  secret_key: "SOME_SECRET_WE_NEED_TO_CHANGE",
+  serializer: AuthExample.GuardianSerializer
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",

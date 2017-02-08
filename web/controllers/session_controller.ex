@@ -9,7 +9,7 @@ defmodule AuthExample.SessionController do
     case AuthExample.Session.login(session_params) do
       {:ok, user} ->
         conn
-        |> put_session(:current_user, user.id)
+        |> Guardian.Plug.sign_in(user)
         |> put_flash(:info, "Logged in")
         |> redirect(to: "/")
       :error ->
@@ -21,7 +21,7 @@ defmodule AuthExample.SessionController do
 
   def delete(conn, _) do
     conn
-    |> delete_session(:current_user)
+    |> Guardian.Plug.sign_out
     |> put_flash(:info, "Logged out")
     |> redirect(to: "/")
   end
