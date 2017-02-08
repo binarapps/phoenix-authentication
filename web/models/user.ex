@@ -13,12 +13,22 @@ defmodule AuthExample.User do
   @doc """
   Builds a changeset based on the `struct` and `params`.
   """
-  def changeset(struct, params \\ %{}) do
+  def changeset(struct, params \\ :empty) do
     struct
     |> cast(params, @required_fields)
-    |> unique_constraint(:email)
     |> validate_format(:email, ~r/@/)
     |> validate_length(:password, min: 8)
-    |> put_change(:crypted_password, Comeonin.Bcrypt.hashpwsalt(params[:password] || ""))
+    |> hash_password
+    |> unique_constraint(:email)
+  end
+
+  defp hash_password(%{valid?: false} = changeset), do: changeset
+  defp hash_password(%{valid?: true} = changeset) do
+    hashed_password =
+      changeset
+      |> get_field(:password)
+      |> Comeonin.Bcrypt.hashpwsalt()
+    changeset
+    |> put_change(:crypted_password, hashed_password)
   end
 end
