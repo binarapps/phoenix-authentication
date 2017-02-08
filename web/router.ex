@@ -21,11 +21,13 @@ defmodule AuthExample.Router do
   scope "/", AuthExample do
     pipe_through [:browser, :browser_auth]
 
-    get "/", PageController, :index
+    get "/", PostController, :index
     resources "/registrations", RegistrationController, only: [:new, :create]
     get    "/login",  SessionController, :new
     post   "/login",  SessionController, :create
     delete "/logout", SessionController, :delete
+
+    resources "/posts", PostController
   end
 
   # Other scopes may use custom stacks.

@@ -25,4 +25,10 @@ defmodule AuthExample.SessionController do
     |> put_flash(:info, "Logged out")
     |> redirect(to: "/")
   end
+
+  def redirect_to_login(conn, _params) do
+    conn
+    |> put_flash(:info, "Authentication required")
+    |> redirect(to: "/login")
+  end
 end
